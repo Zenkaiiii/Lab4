@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+class String
+{
+private:
+    char*value;
+    int len=0;
+public:
+    friend istream & operator >> (istream & in, const String & s)
+    {
+        return in >> s.value;
+    }
+    String():value(new char[1] {}),len(0) {};
+    String(const String &s)
+    {
+        value = s.value;
+        value = new char[len+1];
+        for (int i = 0; i<=len; i++)
+            value[i]=s.value[i];
+    }
+    String(const char*s)
+    {
+        while (s[len] !=0) {
+            len++;
+            value = new char [len+1];
+            for (int i = 0; i<len; i++)
+                value[i]=s[i];
+        }
+    }
+    String& operator=(const String& other)
+    {
+        if (this != &other)delete[] value;
+        len=other.len;
+        value = new char[len+1];
+        for (int i=0; i<=len; i++)
+            value[i]=other.value[i];
+    }
+    String operator-() const
+    {
+        String ret;
+        ret.len = len;
+        delete[] ret.value;
+        ret.value = new char[len+1];
+        for (int i=0; i<len-1; i++)
+            ret.value[i] = value[i];
+        ret.value[len] = 0;
+        return ret;
+    }
+    friend ostream & operator << (ostream & out, const String & s)
+    {
+        return out << s.value;
+    }
+    ~String()
+    {
+        delete[] value;
+    }
+};
+int main()
+{
+    String str1 = "World";
+    String str2;
+    str2=str1;
+    str1=-str1;
+    cout << "Оператор присваивания: "<< str2 << endl;
+    cout << "Оператор унарный минуса: "<< str1 << endl;
+    return 0;
+}
